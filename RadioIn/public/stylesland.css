@@ -40,16 +40,19 @@ body {
     padding: 20px;
     z-index: 2;
     box-sizing: border-box;
-    background-color: #a6a690;
+    background-color: #bd8d6e;
     border: 1px solid #ccc;
 }
 
 .container-left {
     left: 10%;
+    top: 70%;
 }
 
 .container-right {
-    right: 10%;
+    left: 10%;
+    top: 10%;
+    margin-top: 10%;
 }
 
 .text {
@@ -58,22 +61,6 @@ body {
     color: black;
     margin-bottom: 10px;
     text-align: center;
-}
-
-.tent-left,
-.tent-right {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-}
-
-.tent-left {
-    left: 5%;
-}
-
-.tent-right {
-    right: 5%;
 }
 
 .columns {
