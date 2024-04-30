@@ -61,3 +61,47 @@ function sendMessage() {
         messageInput.value = ''; // Clear input field after sending
     }
 }
+
+async function fetchNews() {
+    const apiKey = '471658b22276428ab17487cd7d28aaf2'; // Replace with your actual API key
+    const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        displayNews(data.articles);
+    } catch (error) {
+        console.error('Error fetching news:', error);
+    }
+}
+
+function displayNews(articles) {
+    const newsContainer = document.getElementById('newsFeed');
+    // Clear existing news items before adding new ones
+    newsContainer.innerHTML = '';
+    articles.forEach(article => {
+        const newsItem = document.createElement('div');
+        newsItem.className = 'news-item';
+        newsItem.textContent = article.title; // Display the title as the news content
+        newsItem.style.marginBottom = '20px'; // Adds spacing between news items
+        newsContainer.appendChild(newsItem);
+    });
+
+    startNewsScroll();
+}
+
+function startNewsScroll() {
+    const newsContainer = document.getElementById('newsFeed');
+    setInterval(() => {
+        if (newsContainer.scrollTop < newsContainer.scrollHeight - newsContainer.clientHeight) {
+            newsContainer.scrollTop += 1;
+        } else {
+            newsContainer.scrollTop = 0;
+        }
+    }, 50);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchNews(); // Fetch news on page load
+    setInterval(fetchNews, 5000); // Refresh news every 5000 milliseconds (5 seconds)
+});
