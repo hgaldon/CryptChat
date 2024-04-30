@@ -3,10 +3,10 @@ const table = document.getElementById('roundTable');
 const chatLog = document.getElementById('chatLog');
 let timeoutID;
 
-ddocument.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const username = sessionStorage.getItem('username');
-    const table = document.getElementById('roundTable'); // Make sure to select the roundTable element
-    socket.on('updateUsernames', (available, unavailable) => {
+    socket.emit('chatEntry');
+    socket.on('updateUsernames', ({ available, unavailable }) => {
         updateSeats(available, unavailable);
     });
 });
@@ -15,16 +15,17 @@ function updateSeats(available, unavailable) {
     // Clear the existing content of the seats
     for (let i = 1; i <= 8; i++) {
         const seat = document.getElementById(`seat${i}`);
-        seat.innerText = 'Empty'; // Reset text to 'Empty'
+        seat.innerText = ''; // Reset text to 'Empty'
     }
 
-    unavailable.forEach((username, index) => {
-        const seatID = `seat${index + 1}`; // ID starting from 1
+    // Fill the seats with usernames from the 'unavailable' array
+    for (let i = 0; i < unavailable.length; i++) {
+        const seatID = `seat${i + 1}`; // Create seat ID starting from seat1
         const seat = document.getElementById(seatID);
         if (seat) {
-            seat.innerText = username; // Assign username to the seat
+            seat.innerText = unavailable[i]; // Assign username to the seat
         }
-    });
+    }
 }
 
 socket.on('message', (data) => {

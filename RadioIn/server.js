@@ -102,9 +102,27 @@ io.on('connection', (socket) => {
                     unavailable: unavailableSeats
                 });
             }
-    }
+        }
+
+        const leaveMessage = {
+            username: 'System',
+            message: 'A user has left the chat.'
+        };
+        io.emit('message', leaveMessage);
     });
-    
+
+    socket.on('chatEntry', () => {
+        io.emit('updateUsernames', {
+            available: availableSeats,
+            unavailable: unavailableSeats
+        });
+
+        const joinMessage = {
+            username: 'System',
+            message: 'A user has joined the chat.'
+        };
+        io.emit('message', joinMessage);
+    });
 });
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
