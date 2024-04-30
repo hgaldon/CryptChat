@@ -27,7 +27,7 @@ app.use(express.static('public'));
 
 // Serve the entry page at the root URL
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/land.html');  // Adjust if your directory structure is different
+    res.sendFile(__dirname + '/public/land.html');  // Ensure the landing page is named correctly
 });
 
 const PORT = process.env.PORT || 3000;
@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
         socket.emit('updateUsernames', usernames);
     });
 
-    socket.on('join', (username) => {
+    socket.on('selectUsername', username => {
         if (!militaryAlphabet.includes(username) || seats.includes(username)) {
             socket.emit('error', 'Username taken or invalid');
             return;
@@ -75,16 +75,14 @@ io.on('connection', (socket) => {
             seats[seatIndex] = username;
             socket.handshake.session.username = username;
             socket.handshake.session.save();
-            socket.emit('joined', seatIndex, username);
+            socket.broadcast.emit('usernameSelected', { username, index: seatIndex });
             io.emit('updateSeats', seats);
-        } else {
-            socket.emit('error', 'No available seats');
         }
     });
 
     socket.on('message', (message) => {
         const encryptedMessage = encryptMessage(message);
-        const decryptedMessage = decryptMessage(encryptedMessage);  // Decrypt before sending to client
+        const decryptedMessage = decryptMessage(encryptedMessage);
         io.emit('message', { username: socket.handshake.session.username, message: decryptedMessage });
     });
 

@@ -13,23 +13,21 @@
             <div class="text">Available:</div>
             <div class="columns">
                 <div class="column" id="containerA">
+                    <!-- Usernames will be populated here by script -->
                 </div>
             </div>
-            <button onclick="enterChat()">Enter Chat</button>
+            <button onclick="enterChat()" disabled id="enterButton">Enter Chat</button>
         </div>
         <div class="container-right">
             <div class="text">Unavailable:</div>
             <div class="columns">
                 <div class="column" id="containerB">
+                    <!-- Unavailable usernames, if any, will be shown here -->
                 </div>
             </div>
         </div>
-        <img src="left_tent.png" alt="Left Tent" class="tent-left">
-        <img src="right_tent.png" alt="Right Tent" class="tent-right">
     </div>
-
     <script src="/socket.io/socket.io.js"></script>
     <script src="scriptland.js"></script>
 </body>
-
 </html>
