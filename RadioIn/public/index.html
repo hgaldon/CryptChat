@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypted Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="table"></div>
+    <div id="chatLog"></div>
+    <input type="text" id="usernameInput" placeholder="Enter username (Military Alphabet)">
+    <button onclick="joinChat()">Join</button>
+    <input type="text" id="messageInput" placeholder="Type message">
+    <button onclick="sendMessage()">Send</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
