@@ -9,92 +9,102 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// Session middleware
 const sessionMiddleware = session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Note: secure should be true in production with HTTPS
+    cookie: { secure: false }
 });
 
 app.use(sessionMiddleware);
-io.use(sharedsession(sessionMiddleware, {
-    autoSave: true
-}));
+io.use(sharedsession(sessionMiddleware, { autoSave:true }));
 
-// Serve static files from the public directory
 app.use(express.static('public'));
 
-// Serve the entry page at the root URL
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/land.html');  // Ensure the landing page is named correctly
+    res.sendFile(__dirname + '/public/land.html');
 });
 
-const PORT = process.env.PORT || 3000;
-const seats = Array(8).fill(null);
-const militaryAlphabet = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel'];
+const PORT = 3000;
+const availableSeats = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel'];
+const unavailableSeats = [];
 
-// Encryption key
-const ENCRYPTION_KEY = crypto.randomBytes(32); // Generates a 32-byte key for AES-256
-const IV_LENGTH = 16; // For AES, this is always 16
+const ENCRYPTION_KEY = crypto.randomBytes(32);
+const IV_LENGTH = 16;
 
 function encryptMessage(message) {
     let iv = crypto.randomBytes(IV_LENGTH);
     let cipher = crypto.createCipheriv('aes-256-cbc', ENCRYPTION_KEY, iv);
-    let encrypted = cipher.update(message);
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return iv.toString('hex') + ':' + encrypted.toString('hex');
+    let encrypted = cipher.update(message, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return iv.toString('hex') + ':' + encrypted;
 }
 
 function decryptMessage(message) {
-    let textParts = message.split(':');
-    let iv = Buffer.from(textParts.shift(), 'hex');
-    let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    let parts = message.split(':');
+    let iv = Buffer.from(parts.shift(), 'hex');
+    let encryptedText = Buffer.from(parts.join(':'), 'hex');
     let decipher = crypto.createDecipheriv('aes-256-cbc', ENCRYPTION_KEY, iv);
-    let decrypted = decipher.update(encryptedText);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    return decrypted.toString();
+    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
 }
 
 io.on('connection', (socket) => {
-    socket.on('requestUsernames', () => {
-        const usernames = militaryAlphabet.map(name => ({
-            name,
-            available: !seats.includes(name)
-        }));
-        socket.emit('updateUsernames', usernames);
+    // Send initial username statuses when a client connects
+    socket.emit('updateUsernames', {
+        available: availableSeats,
+        unavailable: unavailableSeats
     });
 
-    socket.on('selectUsername', username => {
-        if (!militaryAlphabet.includes(username) || seats.includes(username)) {
-            socket.emit('error', 'Username taken or invalid');
-            return;
-        }
-        const seatIndex = seats.findIndex(seat => seat === null);
-        if (seatIndex !== -1) {
-            seats[seatIndex] = username;
+    socket.on('confirmUsername', (username) => {
+        const index = availableSeats.indexOf(username);
+        if (index !== -1) {
+            // Move username from available to unavailable
+            availableSeats.splice(index, 1);
+            unavailableSeats.push(username);
+
             socket.handshake.session.username = username;
             socket.handshake.session.save();
-            socket.broadcast.emit('usernameSelected', { username, index: seatIndex });
-            io.emit('updateSeats', seats);
-        }
-    });
 
-    socket.on('message', (message) => {
-        const encryptedMessage = encryptMessage(message);
+            // Immediately update all clients about the availability
+            io.emit('updateUsernames', {
+                available: availableSeats,
+                unavailable: unavailableSeats
+            });
+        } else {
+            socket.emit('error', 'Username already taken or invalid upon confirmation.');
+        }
+    });   
+
+    socket.on('message', (data) => {
+        if (typeof data.message !== 'string') {
+            socket.emit('error', 'Invalid message format');
+            return;
+        }
+        const encryptedMessage = encryptMessage(data.message);
         const decryptedMessage = decryptMessage(encryptedMessage);
-        io.emit('message', { username: socket.handshake.session.username, message: decryptedMessage });
+        io.emit('message', { username: data.username, message: decryptedMessage });
     });
 
-    socket.on('disconnect', () => {
-        const index = seats.indexOf(socket.handshake.session.username);
-        if (index !== -1) {
-            seats[index] = null;
-            io.emit('updateSeats', seats);
-        }
+    socket.on('chatExit', () => {
+        const username = socket.handshake.session.username;
+        if (username) {
+            const index = unavailableSeats.indexOf(username);
+            if (index !== -1) {
+                // Move username from unavailable to available
+                unavailableSeats.splice(index, 1);
+                availableSeats.push(username);
+
+                // Immediately update all clients about the availability
+                io.emit('updateUsernames', {
+                    available: availableSeats,
+                    unavailable: unavailableSeats
+                });
+            }
+    }
     });
+    
 });
 
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

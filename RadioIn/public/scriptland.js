@@ -1,31 +1,41 @@
 const socket = io();
 
 document.addEventListener('DOMContentLoaded', () => {
-    socket.emit('requestUsernames');
-
-    socket.on('updateUsernames', usernames => {
+    socket.on('updateUsernames', ({ available, unavailable }) => {
         const containerA = document.getElementById('containerA');
-        containerA.innerHTML = ''; // Clear previous usernames
+        const containerB = document.getElementById('containerB');
+        containerA.innerHTML = '';
+        containerB.innerHTML = '';
 
-        usernames.forEach(user => {
-            const userBtn = document.createElement('button');
-            userBtn.textContent = user.name;
-            userBtn.className = 'username';
-            userBtn.onclick = () => selectUsername(user.name, userBtn);
+        available.forEach(user => {
+            const userBtn = createUserButton(user, true);
+            containerA.appendChild(userBtn);
+        });
 
-            if (user.available) {
-                containerA.appendChild(userBtn);
-            } else {
-                userBtn.disabled = true;
-            }
+        unavailable.forEach(user => {
+            const userBtn = createUserButton(user, false);
+            containerB.appendChild(userBtn);
         });
     });
 });
+
+function createUserButton(name, available) {
+    const userBtn = document.createElement('button');
+    userBtn.textContent = name;
+    userBtn.className = 'username';
+    userBtn.disabled = !available;
+    userBtn.onclick = () => {
+        if (available) selectUsername(name, userBtn);
+    };
+    return userBtn;
+}
 
 function selectUsername(name, btn) {
     const previouslyActive = document.querySelector('.username.active');
     if (previouslyActive) {
         previouslyActive.classList.remove('active');
+        previouslyActive.disabled = false;
+        document.getElementById('containerA').appendChild(previouslyActive);
     }
     btn.classList.add('active');
     sessionStorage.setItem('username', name);
@@ -35,8 +45,10 @@ function selectUsername(name, btn) {
 function enterChat() {
     const username = sessionStorage.getItem('username');
     if (username) {
+        socket.emit('confirmUsername', username); // Confirm username selection
         window.location.href = 'chat.html';
     } else {
         alert('Please select a username.');
     }
 }
+

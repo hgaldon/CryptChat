@@ -60,6 +60,22 @@ body {
     text-align: center;
 }
 
+.tent-left,
+.tent-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.tent-left {
+    left: 5%;
+}
+
+.tent-right {
+    right: 5%;
+}
+
 .columns {
     display: flex;
     justify-content: space-around;
