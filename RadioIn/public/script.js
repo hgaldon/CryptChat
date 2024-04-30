@@ -31,9 +31,12 @@ function updateSeats(available, unavailable) {
 socket.on('message', (data) => {
     const messageDiv = document.createElement('div');
     messageDiv.textContent = `${data.username}: ${data.message}`;
+    // Assign classes based on the username or any other suitable logic
+    messageDiv.className = 'message ' + (data.username === sessionStorage.getItem('username') ? 'sent-message' : 'received-message');
     chatLog.appendChild(messageDiv);
     chatLog.scrollTop = chatLog.scrollHeight; // Auto-scroll to the latest message
 });
+
 
 window.addEventListener("beforeunload", () => {
     socket.emit('chatExit');
@@ -77,18 +80,34 @@ async function fetchNews() {
 
 function displayNews(articles) {
     const newsContainer = document.getElementById('newsFeed');
-    // Clear existing news items before adding new ones
-    newsContainer.innerHTML = '';
+    newsContainer.innerHTML = ''; // Clear existing news items
+
     articles.forEach(article => {
         const newsItem = document.createElement('div');
+        const link = document.createElement('a');  // Create an anchor element
+        const title = document.createElement('h2'); // Use a heading for the title
+        const description = document.createElement('p'); // Use paragraph for the description
+
+        title.textContent = article.title;
+        description.textContent = article.description || "No description available."; // Provide a fallback
+
+        link.href = article.url; // Set the URL from the article data
+        link.target = "_blank"; // Opens the link in a new tab
+        link.className = 'news-item-link'; // Optional: Assign a class for styling
+        link.appendChild(title); // Append the title to the link
+
+        title.className = 'news-item-title';
+        description.className = 'news-item-description';
+
+        newsItem.appendChild(link); // Append the link to the news item
+        newsItem.appendChild(description);
         newsItem.className = 'news-item';
-        newsItem.textContent = article.title; // Display the title as the news content
-        newsItem.style.marginBottom = '20px'; // Adds spacing between news items
+
         newsContainer.appendChild(newsItem);
     });
-
-    startNewsScroll();
 }
+
+
 
 function startNewsScroll() {
     const newsContainer = document.getElementById('newsFeed');
