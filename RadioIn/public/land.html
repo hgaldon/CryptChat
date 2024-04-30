@@ -9,7 +9,6 @@
 <body>
     <div class="container">
         <div class="header">Select Username</div>
-        <div class="line"></div>
         <div class="columns">
             <div class="column" id="containerA">
                 <div>Available:</div>
@@ -18,8 +17,10 @@
                 <div>Unavailable:</div>
             </div>
         </div>
+        <button onclick="enterChat()">Enter Chat</button>
     </div>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script src="scriptland.js"></script>
 </body>
 </html>

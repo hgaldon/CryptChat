@@ -21,21 +21,6 @@ body {
     flex-wrap: wrap;
 }
 
-.seat {
-    width: 120px;
-    height: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 14px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    position: absolute;
-}
-
 #chatLog {
     width: 300px;
     height: 400px;
@@ -46,4 +31,17 @@ body {
 
 input, button {
     margin-top: 10px;
+}
+
+.news-feed {
+    position: absolute;
+    top: 10px;
+    left: 620px;
+    width: 150px;
+    height: 600px;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background-position: 0px 0px;
 }
