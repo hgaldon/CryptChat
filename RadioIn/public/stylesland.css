@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+.header {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.line {
+    width: 100%;
+    border-bottom: 2px solid black;
+    margin-bottom: 20px;
+}
+.columns {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+.column {
+    width: 45%;
+    border: 1px solid black;
+    padding: 10px;
+    box-sizing: border-box;
+}
+button {
+    margin-bottom: 5px;
+}
+.unavailable {
+    color: red;
+}
