@@ -7,20 +7,29 @@
     <link rel="stylesheet" type="text/css" href="stylesland.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">Select Username</div>
-        <div class="columns">
-            <div class="column" id="containerA">
-                <div>Available:</div>
+    <div class="background-container">
+        <div class="header">Select Username:</div>
+        <div class="container-left">
+            <div class="text">Available:</div>
+            <div class="columns">
+                <div class="column" id="containerA">
+                </div>
             </div>
-            <div class="column" id="containerB">
-                <div>Unavailable:</div>
+            <button onclick="enterChat()">Enter Chat</button>
+        </div>
+        <div class="container-right">
+            <div class="text">Unavailable:</div>
+            <div class="columns">
+                <div class="column" id="containerB">
+                </div>
             </div>
         </div>
-        <button onclick="enterChat()">Enter Chat</button>
+        <img src="left_tent.png" alt="Left Tent" class="tent-left">
+        <img src="right_tent.png" alt="Right Tent" class="tent-right">
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="scriptland.js"></script>
 </body>
+
 </html>
