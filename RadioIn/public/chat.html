@@ -7,11 +7,17 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="table"></div>
-    <div id="chatLog"></div>
-    <input type="text" id="messageInput" placeholder="Type message">
-    <button onclick="sendMessage()">Send</button>
-    <div id="newsFeed" class="news-feed"></div>
+    <div class="container">
+        <div id="roundTable" class="round-table">
+            <!-- 8 seats will be dynamically generated here -->
+        </div>
+    </div>
+    <div id="chatLog" class="chat-log"></div>
+    <input type="text" id="messageInput" class="message-input" placeholder="Type message">
+    <button onclick="sendMessage()" class="send-button">Send</button>
+    <div class="sidebar">
+        <div id="newsFeed" class="news-feed"></div>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 </body>

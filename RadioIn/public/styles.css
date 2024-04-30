@@ -6,12 +6,20 @@ body {
     height: 100vh;
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
 }
 
-#table {
-    position: relative;
-    width: 600px;
-    height: 600px;
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.round-table {
+    width: 400px;
+    height: 400px;
     border-radius: 50%;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -21,27 +29,36 @@ body {
     flex-wrap: wrap;
 }
 
-#chatLog {
+.round-table .seat {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin: 20px;
+}
+
+.chat-log {
+    margin-top: 50px;
     width: 300px;
     height: 400px;
     border: 1px solid #ccc;
-    margin-top: 20px;
     overflow-y: scroll;
+    margin-left: 20px; /* Add margin to create space between round table and chat log */
 }
 
-input, button {
+.message-input, .send-button {
     margin-top: 10px;
 }
 
 .news-feed {
-    position: absolute;
-    top: 10px;
-    left: 620px;
-    width: 150px;
-    height: 600px;
-    overflow: hidden;
+    position: absolute; /* Position absolutely */
+    top: 0; /* Align to the top */
+    right: 200px; /* Align to the right */
+    width: 400px;
+    height: 900px; /* Fill the entire height of the viewport */
+    overflow-y: scroll;
     background-color: #f1f1f1;
     border: 1px solid #ccc;
     padding: 5px;
-    background-position: 0px 0px;
+    margin-top: 20px; /* Add margin to create space between chat log and news feed */
 }
