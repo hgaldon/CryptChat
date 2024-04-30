@@ -18,6 +18,9 @@ body {
 }
 
 .round-table {
+    position: absolute;
+    left: 150px;
+    bottom: 300px;
     width: 400px;
     height: 400px;
     border-radius: 50%;
@@ -38,17 +41,34 @@ body {
 }
 
 .chat-log {
-    margin-top: 50px;
-    width: 300px;
-    height: 400px;
+    width: 500px;
+    height: 800px;
     border: 1px solid #ccc;
     overflow-y: scroll;
-    margin-left: 20px; /* Add margin to create space between round table and chat log */
 }
 
-.message-input, .send-button {
+.message-input {
     margin-top: 10px;
+    width: 500px;  /* Make the input field longer */
+    height: 50px; /* Make the input field bigger */
+    padding: 10px; /* Add padding for better text visibility */
+    font-size: 16px; /* Increase font size for better readability */
+    border: 1px solid #ccc; /* Add a subtle border */
+    border-radius: 5px; /* Round the corners */
 }
+
+.send-button {
+    margin-top: 10px;
+    width: 18%; /* Adjust width to complement the input field */
+    height: 50px; /* Align height with the input field */
+    background-color: #007BFF; /* Add a blue background */
+    color: white; /* Make the text color white for better contrast */
+    border: none; /* Remove border for a cleaner look */
+    border-radius: 5px; /* Round the corners */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+    font-size: 16px; /* Increase font size for uniformity with the input field */
+}
+
 
 .news-feed {
     position: absolute; /* Position absolutely */
@@ -62,3 +82,26 @@ body {
     padding: 5px;
     margin-top: 20px; /* Add margin to create space between chat log and news feed */
 }
+
+.seat {
+    position: absolute; /* Position seats absolutely within the round-table */
+    width: 100px;
+    height: 100px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #eee; /* Optional: Adds a background color to the seats */
+}
+
+/* Dynamically calculate the position for each seat */
+#seat1 { transform: translate(200px, 0px); }
+#seat2 { transform: rotate(45deg) translate(200px, 0px) rotate(-45deg); }
+#seat3 { transform: rotate(90deg) translate(200px, 0px) rotate(-90deg); }
+#seat4 { transform: rotate(135deg) translate(200px, 0px) rotate(-135deg); }
+#seat5 { transform: rotate(180deg) translate(200px, 0px) rotate(-180deg); }
+#seat6 { transform: rotate(225deg) translate(200px, 0px) rotate(-225deg); }
+#seat7 { transform: rotate(270deg) translate(200px, 0px) rotate(-270deg); }
+#seat8 { transform: rotate(315deg) translate(200px, 0px) rotate(-315deg); }
