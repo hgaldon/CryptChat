@@ -7,7 +7,11 @@ body {
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
     margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
+    padding: 0; /* Remve default padding */
+    background-image: url('camo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .container {
@@ -16,13 +20,19 @@ body {
     align-items: flex-start;
     margin-top: 20px;
 }
+.round-table-img{
+    position: relative;
+    left: 0px;
+    top: -85px;
+    transform: scale(1.05)
+}
 
 .round-table {
     position: absolute;
-    left: 75px;
+    left: 45px;
     bottom: 250px;
-    width: 400px;
-    height: 400px;
+    width: 350px;
+    height: 350px;
     border-radius: 50%;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -30,6 +40,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    transform: scale(.85);
 }
 
 .round-table .seat {
@@ -166,21 +177,19 @@ body {
     position: absolute; /* Position seats absolutely within the round-table */
     width: 100px;
     height: 100px;
-    border: 2px solid #ccc;
-    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: #eee; /* Optional: Adds a background color to the seats */
+    background-color: transparent;
 }
 
-/* Dynamically calculate the position for each seat */
-#seat1 { transform: translate(200px, 0px); }
-#seat2 { transform: rotate(45deg) translate(200px, 0px) rotate(-45deg); }
-#seat3 { transform: rotate(90deg) translate(200px, 0px) rotate(-90deg); }
-#seat4 { transform: rotate(135deg) translate(200px, 0px) rotate(-135deg); }
-#seat5 { transform: rotate(180deg) translate(200px, 0px) rotate(-180deg); }
-#seat6 { transform: rotate(225deg) translate(200px, 0px) rotate(-225deg); }
-#seat7 { transform: rotate(270deg) translate(200px, 0px) rotate(-270deg); }
-#seat8 { transform: rotate(315deg) translate(200px, 0px) rotate(-315deg); }
+/* Dynamically calculate the position for each seat*/
+#seat1 { transform: translate(200px, 0px) rotate(-90deg); border-width: 0;}
+#seat2 { transform: rotate(45deg) translate(200px, 0px) rotate(-90deg); border-width: 0;}
+#seat3 { transform: rotate(90deg) translate(200px, 0px) rotate(-90deg); border-width: 0;}
+#seat4 { transform: rotate(135deg) translate(200px, 0px) rotate(-90deg); border-width: 0;}
+#seat5 { transform: rotate(180deg) translate(200px, 0px) rotate(-90deg); border-width: 0;}
+#seat6 { transform: rotate(225deg) translate(200px, 0px) rotate(-90deg); border-width: 0;}
+#seat7 { transform: rotate(270deg) translate(200px, 0px) rotate(-90deg); border-width: 0;}
+#seat8 { transform: rotate(315deg) translate(200px, 0px) rotate(-90deg); border-width: 0;}
