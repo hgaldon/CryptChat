@@ -2,14 +2,19 @@ const socket = io();
 const table = document.getElementById('roundTable');
 const chatLog = document.getElementById('chatLog');
 let timeoutID;
+let username;
 
 document.addEventListener('DOMContentLoaded', function() {
-    const username = sessionStorage.getItem('username');
+    fetchNews();
+    setInterval(fetchNews, 5000);
+    username = localStorage.getItem('username');
+    sessionStorage.setItem('username', username);
     socket.emit('chatEntry');
     socket.on('updateUsernames', ({ available, unavailable }) => {
         updateSeats(available, unavailable);
     });
 });
+
 
 function updateSeats(available, unavailable) {
     // Clear the existing content of the seats
@@ -23,10 +28,11 @@ function updateSeats(available, unavailable) {
         const seatID = `seat${i + 1}`; // Create seat ID starting from seat1
         const seat = document.getElementById(seatID);
         if (seat) {
-            seat.innerText = unavailable[i]; // Assign username to the seat
+            seat.innerText = unavailable[i].charAt(0);; // Assign username to the seat
         }
     }
 }
+
 
 socket.on('message', (data) => {
     const messageDiv = document.createElement('div');
@@ -38,17 +44,23 @@ socket.on('message', (data) => {
 });
 
 
-window.addEventListener("beforeunload", () => {
-    socket.emit('chatExit');
+window.addEventListener("beforeunload", (event) => {
+    const storedData = sessionStorage.getItem('username');
+    if (!storedData) {
+        socket.emit('chatExit');
+    }
 });
 
 document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
         timeoutID = setTimeout(() => {
+            localStorage.removeItem('username');
+            sessionStorage.removeItem('username');
             socket.emit('chatExit');
+            window.location.href = '/';
         }, 300000); // Wait for 5 minutes (300,000 milliseconds) before emitting disconnect event
     } else {
-        clearTimeout(timeoutID); // Clear the timeout if tab becomes visible again
+        clearTimeout(timeoutID);
     }
 });
 
@@ -60,10 +72,17 @@ function sendMessage() {
     const messageInput = document.getElementById('messageInput');
     const message = messageInput.value;
     if (message.trim()) {  // Make sure not to send empty messages
-        socket.emit('message', { username: sessionStorage.getItem('username'), message });
+        socket.emit('message', { username: localStorage.getItem('username'), message });
         messageInput.value = ''; // Clear input field after sending
     }
 }
+
+function leave() {
+    localStorage.removeItem('username');
+    sessionStorage.removeItem('username');
+    socket.emit('chatExit');
+    window.location.href = '/';
+};
 
 async function fetchNews() {
     const apiKey = '471658b22276428ab17487cd7d28aaf2'; // Replace with your actual API key
@@ -107,8 +126,6 @@ function displayNews(articles) {
     });
 }
 
-
-
 function startNewsScroll() {
     const newsContainer = document.getElementById('newsFeed');
     setInterval(() => {
@@ -119,8 +136,3 @@ function startNewsScroll() {
         }
     }, 50);
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    fetchNews(); // Fetch news on page load
-    setInterval(fetchNews, 5000); // Refresh news every 5000 milliseconds (5 seconds)
-});

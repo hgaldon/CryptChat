@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const userBtn = createUserButton(user, false);
             containerB.appendChild(userBtn);
         });
+
+        const username = localStorage.getItem('username');
+        if (username !== 'null' && username) {
+            console.log("Yes");
+            enterChat();
+        } else {
+            console.log("Nope");
+        }
     });
 });
 
@@ -38,12 +46,12 @@ function selectUsername(name, btn) {
         document.getElementById('containerA').appendChild(previouslyActive);
     }
     btn.classList.add('active');
-    sessionStorage.setItem('username', name);
+    localStorage.setItem('username', name);
     document.getElementById('enterButton').disabled = false;
 }
 
 function enterChat() {
-    const username = sessionStorage.getItem('username');
+    const username = localStorage.getItem('username');
     if (username) {
         socket.emit('confirmUsername', username); // Confirm username selection
         window.location.href = 'chat.html';
@@ -51,4 +59,3 @@ function enterChat() {
         alert('Please select a username.');
     }
 }
-
