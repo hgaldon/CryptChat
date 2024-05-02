@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio-In</title>
+    <title>Encrypted Chat</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="radiob.png">
 </head>
@@ -24,7 +24,7 @@
     </div>    
     <div id="chatLog" class="chat-log"></div>
     <input type="text" id="messageInput" class="message-input" placeholder="Type message">
-    <button onclick="sendMessage()" class="send-button">Send</button>
+    <button onclick="sendMessage()" id="sendButton" class="send-button" disabled>Send</button>
     <div class="sidebar">
         <div id="newsFeed" class="news-feed"></div>
     </div>
